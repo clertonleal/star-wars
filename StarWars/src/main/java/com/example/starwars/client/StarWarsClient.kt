@@ -2,6 +2,7 @@ package com.example.starwars.client
 
 import com.example.starwars.CallbackExecutor
 import com.example.starwars.model.People
+import com.example.starwars.model.PeopleList
 import com.example.starwars.model.StarWarsException
 import com.example.starwars.network.StartWarsNetwork
 import retrofit2.Call
@@ -14,10 +15,22 @@ class StarWarsClient(private val startWarsNetwork: StartWarsNetwork,
     fun getPeopleById(id: String,
                       successCallback: (People) -> Unit,
                       errorCallback: (StarWarsException) -> Unit,
-                      mainThread: Boolean = true,) {
-        startWarsNetwork.getPeople(id).enqueue(object : Callback<People> {
-            override fun onResponse(call: Call<People>, response: Response<People>) {
-                val body = response.body()
+                      mainThread: Boolean = true) {
+        startWarsNetwork.getPeople(id).enqueue(executeRequest(successCallback, errorCallback, mainThread))
+    }
+
+    fun getPeople(successCallback: (PeopleList) -> Unit,
+                      errorCallback: (StarWarsException) -> Unit,
+                      mainThread: Boolean = true) {
+        startWarsNetwork.getPeople().enqueue(executeRequest(successCallback, errorCallback, mainThread))
+    }
+
+    private fun <T> executeRequest(successCallback: (T) -> Unit,
+                                   errorCallback: (StarWarsException) -> Unit,
+                                   mainThread: Boolean = true): Callback<T> {
+        return object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                val body: T? = response.body()
                 if (response.isSuccessful && body != null) {
                     callbackExecutor.executeCallback(mainThread) {
                         successCallback(body)
@@ -29,12 +42,11 @@ class StarWarsClient(private val startWarsNetwork: StartWarsNetwork,
                 }
             }
 
-            override fun onFailure(call: Call<People>, error: Throwable) {
+            override fun onFailure(call: Call<T>, error: Throwable) {
                 callbackExecutor.executeCallback(mainThread) {
                     errorCallback(StarWarsException("Internal SDK error", error))
                 }
             }
-        })
+        }
     }
-
 }

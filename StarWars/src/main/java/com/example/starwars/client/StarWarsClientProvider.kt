@@ -2,6 +2,7 @@ package com.example.starwars.client
 
 import com.example.starwars.CallbackExecutor
 import com.example.starwars.network.NetworkProvider
+import com.example.starwars.network.StartWarsNetwork
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,7 +13,15 @@ import retrofit2.Retrofit
 
 object StarWarsClientProvider {
 
+    fun provideStarWarsSyncClient(): StarWarsSyncClient {
+        return StarWarsSyncClient(provideStarWarsNetwork())
+    }
+
     fun provideStarWarsClient(): StarWarsClient {
+        return StarWarsClient(provideStarWarsNetwork(), CallbackExecutor())
+    }
+
+    private fun provideStarWarsNetwork(): StartWarsNetwork {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
@@ -24,7 +33,7 @@ object StarWarsClientProvider {
             .build()
 
         val networkProvider = NetworkProvider(retrofit)
-        return StarWarsClient(networkProvider.provideStarWarsNetwork(), CallbackExecutor())
+        return networkProvider.provideStarWarsNetwork()
     }
 
 }

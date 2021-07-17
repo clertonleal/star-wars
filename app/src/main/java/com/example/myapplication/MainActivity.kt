@@ -13,11 +13,11 @@ class MainActivity : AppCompatActivity() {
         val starWarsClient = StarWarsClientProvider.provideStarWarsClient()
         binding.requestPeopleButton.setOnClickListener {
             if (binding.peopleId.text.isEmpty()) {
-//                starWarsClient.getPeople({
-//                    binding.output.text = it.toString()
-//                }, {
-//                    binding.output.text = it.message
-//                })
+                starWarsClient.getPeople({
+                    binding.output.text = it.toString()
+                }, {
+                    binding.output.text = it.message
+                })
             } else {
                 starWarsClient.getPeopleById(binding.peopleId.text.toString(), {
                     binding.output.text = it.toString()
