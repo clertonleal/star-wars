@@ -16,13 +16,45 @@ class MainActivity : AppCompatActivity() {
                 starWarsClient.getPeople({
                     binding.output.text = it.toString()
                 }, {
-                    binding.output.text = it.message
+                    binding.output.text = it.stackTraceToString()
                 })
             } else {
-                starWarsClient.getPeopleById(binding.peopleId.text.toString(), {
+                starWarsClient.getPearsonById(binding.peopleId.text.toString(), {
                     binding.output.text = it.toString()
                 }, {
+                    binding.output.text = it.stackTraceToString()
+                })
+            }
+        }
+
+        binding.requestPlanetButton.setOnClickListener {
+            if (binding.planetId.text.isEmpty()) {
+                starWarsClient.getPlanets({
                     binding.output.text = it.toString()
+                }, {
+                    binding.output.text = it.stackTraceToString()
+                })
+            } else {
+                starWarsClient.getPlanetById(binding.planetId.text.toString(), {
+                    binding.output.text = it.toString()
+                }, {
+                    binding.output.text = it.stackTraceToString()
+                })
+            }
+        }
+
+        binding.requestFilmButton.setOnClickListener {
+            if (binding.filmId.text.isEmpty()) {
+                starWarsClient.getFilms({
+                    binding.output.text = it.toString()
+                }, {
+                    binding.output.text = it.stackTraceToString()
+                })
+            } else {
+                starWarsClient.getFilmById(binding.filmId.text.toString(), {
+                    binding.output.text = it.toString()
+                }, {
+                    binding.output.text = it.stackTraceToString()
                 })
             }
         }

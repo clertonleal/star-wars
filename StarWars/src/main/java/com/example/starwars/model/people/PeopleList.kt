@@ -1,4 +1,4 @@
-package com.example.starwars.model
+package com.example.starwars.model.people
 
 import kotlinx.serialization.Serializable
 

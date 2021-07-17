@@ -2,8 +2,12 @@ package com.example.starwars
 
 import com.example.starwars.client.RequestExecutor
 import com.example.starwars.client.StarWarsClient
-import com.example.starwars.model.People
-import com.example.starwars.model.PeopleList
+import com.example.starwars.model.film.Film
+import com.example.starwars.model.film.FilmList
+import com.example.starwars.model.people.People
+import com.example.starwars.model.people.PeopleList
+import com.example.starwars.model.planet.Planet
+import com.example.starwars.model.planet.PlanetList
 import com.example.starwars.network.StartWarsNetwork
 import io.mockk.every
 import io.mockk.mockk
@@ -27,15 +31,15 @@ class StarWarsClientTest {
     }
 
     @Test
-    fun whenCallGetPeopleByIdShouldCallStartWarsNetwork() {
+    fun whenCallGetPearsonByIdShouldCallStartWarsNetwork() {
         val peopleRetrofitCallback: Call<People> = mockk(relaxed = true)
-        every { startWarsNetwork.getPeople("5") } returns peopleRetrofitCallback
+        every { startWarsNetwork.getPerson("5") } returns peopleRetrofitCallback
         val requestExecutor: Callback<People> = mockk()
         every { this@StarWarsClientTest.requestExecutor.executeRequest<People>(any(), any(), true) } returns requestExecutor
 
-        starWarsClient.getPeopleById("5", mockk(), mockk(), true)
+        starWarsClient.getPearsonById("5", mockk(), mockk(), true)
 
-        verify { startWarsNetwork.getPeople("5") }
+        verify { startWarsNetwork.getPerson("5") }
         verify { peopleRetrofitCallback.enqueue(requestExecutor) }
     }
 
@@ -49,6 +53,58 @@ class StarWarsClientTest {
         starWarsClient.getPeople(mockk(), mockk(), true)
 
         verify { startWarsNetwork.getPeople() }
+        verify { peopleRetrofitCallback.enqueue(requestExecutor) }
+    }
+
+    @Test
+    fun whenCallGetPlanetByIdShouldCallStartWarsNetwork() {
+        val peopleRetrofitCallback: Call<Planet> = mockk(relaxed = true)
+        every { startWarsNetwork.getPlanet("5") } returns peopleRetrofitCallback
+        val requestExecutor: Callback<Planet> = mockk()
+        every { this@StarWarsClientTest.requestExecutor.executeRequest<Planet>(any(), any(), true) } returns requestExecutor
+
+        starWarsClient.getPlanetById("5", mockk(), mockk(), true)
+
+        verify { startWarsNetwork.getPlanet("5") }
+        verify { peopleRetrofitCallback.enqueue(requestExecutor) }
+    }
+
+    @Test
+    fun whenCallGetPlanetsShouldCallStartWarsNetwork() {
+        val peopleRetrofitCallback: Call<PlanetList> = mockk(relaxed = true)
+        every { startWarsNetwork.getPlanets() } returns peopleRetrofitCallback
+        val requestExecutor: Callback<PlanetList> = mockk()
+        every { this@StarWarsClientTest.requestExecutor.executeRequest<PlanetList>(any(), any(), true) } returns requestExecutor
+
+        starWarsClient.getPlanets(mockk(), mockk(), true)
+
+        verify { startWarsNetwork.getPlanets() }
+        verify { peopleRetrofitCallback.enqueue(requestExecutor) }
+    }
+
+    @Test
+    fun whenCallGetFilmByIdShouldCallStartWarsNetwork() {
+        val peopleRetrofitCallback: Call<Film> = mockk(relaxed = true)
+        every { startWarsNetwork.getFilm("5") } returns peopleRetrofitCallback
+        val requestExecutor: Callback<Film> = mockk()
+        every { this@StarWarsClientTest.requestExecutor.executeRequest<Film>(any(), any(), true) } returns requestExecutor
+
+        starWarsClient.getFilmById("5", mockk(), mockk(), true)
+
+        verify { startWarsNetwork.getFilm("5") }
+        verify { peopleRetrofitCallback.enqueue(requestExecutor) }
+    }
+
+    @Test
+    fun whenCallGetFilmsShouldCallStartWarsNetwork() {
+        val peopleRetrofitCallback: Call<FilmList> = mockk(relaxed = true)
+        every { startWarsNetwork.getFilms() } returns peopleRetrofitCallback
+        val requestExecutor: Callback<FilmList> = mockk()
+        every { this@StarWarsClientTest.requestExecutor.executeRequest<FilmList>(any(), any(), true) } returns requestExecutor
+
+        starWarsClient.getFilms(mockk(), mockk(), true)
+
+        verify { startWarsNetwork.getFilms() }
         verify { peopleRetrofitCallback.enqueue(requestExecutor) }
     }
 }

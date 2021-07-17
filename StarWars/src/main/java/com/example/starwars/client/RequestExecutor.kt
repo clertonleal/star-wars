@@ -4,6 +4,7 @@ import com.example.starwars.model.StarWarsException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 /**
  * RequestExecutor is a internal class responsible to centralize a logic of all REST calls
@@ -25,6 +26,7 @@ class RequestExecutor(private val mainThreadExecutor: MainThreadExecutor) {
                         successCallback(body)
                     }
                 } else {
+                    Timber.e("Network error code: ${response.code()}. Message: ${response.errorBody()}")
                     if (mainThread) {
                         mainThreadExecutor.executeOnMainThread { errorCallback(StarWarsException("Network error code: ${response.code()}. Message: ${response.errorBody()}")) }
                     } else {
@@ -34,6 +36,7 @@ class RequestExecutor(private val mainThreadExecutor: MainThreadExecutor) {
             }
 
             override fun onFailure(call: Call<T>, error: Throwable) {
+                Timber.e(error, "Internal SDK error")
                 if (mainThread) {
                     mainThreadExecutor.executeOnMainThread {
                         errorCallback(
