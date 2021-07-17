@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                 starWarsClient.getPeopleById(binding.peopleId.text.toString(), {
                     binding.output.text = it.toString()
                 }, {
-                    binding.output.text = it.message
+                    binding.output.text = it.toString()
                 })
             }
         }

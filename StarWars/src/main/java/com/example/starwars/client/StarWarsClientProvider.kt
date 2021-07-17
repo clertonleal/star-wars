@@ -1,6 +1,5 @@
 package com.example.starwars.client
 
-import com.example.starwars.CallbackExecutor
 import com.example.starwars.network.NetworkProvider
 import com.example.starwars.network.StartWarsNetwork
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -10,15 +9,15 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-
+/**
+ * StarWarsClientProvider is the class that should be used by all used of this SDK to create a StarWarsClient instance.
+ * All complexity about how to instantiate a StarWarsClient in mitigated by this class.
+ * @see StarWarsClient
+ */
 object StarWarsClientProvider {
 
-    fun provideStarWarsSyncClient(): StarWarsSyncClient {
-        return StarWarsSyncClient(provideStarWarsNetwork())
-    }
-
     fun provideStarWarsClient(): StarWarsClient {
-        return StarWarsClient(provideStarWarsNetwork(), CallbackExecutor())
+        return StarWarsClient(provideStarWarsNetwork(), RequestExecutor(MainThreadExecutor()))
     }
 
     private fun provideStarWarsNetwork(): StartWarsNetwork {
