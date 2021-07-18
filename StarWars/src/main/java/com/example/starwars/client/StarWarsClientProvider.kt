@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 /**
  * StarWarsClientProvider is the class that should be used by all used of this SDK to create a StarWarsClient instance.
@@ -23,7 +24,11 @@ object StarWarsClientProvider {
     private fun provideStarWarsNetwork(): StartWarsNetwork {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
+            .addInterceptor(interceptor).build()
 
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://swapi.dev/api/")
